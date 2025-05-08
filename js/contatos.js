@@ -1,12 +1,27 @@
 'use strict'
 
+
+export async function postContato(contato) {
+    const url = 'https://bakcend-fecaf-render.onrender.com/contatos'
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(contato)
+    }
+    const response = await fetch (url, options)
+
+    return response.ok
+}
+
+
 export async function getContatos(){
     const url = 'https://bakcend-fecaf-render.onrender.com/contatos'
     const response = await fetch(url)
     const data = await response.json()
     // console.log(data)
     return data
-
 }
 
 export async function getContatosNome(nome){

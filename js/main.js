@@ -1,21 +1,9 @@
 'use strict'
 
-import { getContatos, getContatosNome } from "./contatos.js"
-
-
-async function exibirPesquisa (evento){
-    if ( evento.key == 'Enter'){
-        const contatos = await getContatosNome(evento.target.value)
-        document.getElementById('container').replaceChildren()
-        contatos.forEach(criarCard)
-    }
-
-    
-    
-}
+import { getContatos, getContatosNome, postContato } from "./contatos.js"
 
 function criarCard (contato){
-    
+    // console.log(contato)
     const container = document.getElementById('container')
     const card = document.createElement('div')
     card.classList.add('card-contato')
@@ -33,7 +21,54 @@ async function exibirContatos(){
     contatos.forEach( criarCard )
 }
 
-exibirContatos()
+async function exibirPesquisa(evento){
+    if (evento.key == 'Enter'){
+        // console.log(evento)
+        // console.log(evento.target.value)
+        // console.log('Olá Mundo')
+        const contatos = await getContatosNome(evento.target.value)
+        document,getElementById('container').replaceChildren()
+        contatos.forEach(criarCard)
+    }
+}
 
-document.getElementById('pesquisa').addEventListener('keydown', exibirPesquisa)
-                
+function cadastrarContato (){
+    document.querySelector('main').className = 'form-show'
+}
+
+function voltarHome (){
+    document.querySelector('main').className = 'card-show'
+}
+
+async function salvarContato () {
+    const contato = {
+            "nome": document.getElementById('nome').value,
+            "celular": document.getElementById('celular').value,
+            "foto": document.getElementById('foto').value,
+            "email": document.getElementById('email').value,
+            "endereco": document.getElementById('endereco').value,
+            "cidade": document.getElementById('cidade').value
+        }
+
+        if (await postContato(contato)){
+            await exibirContatos()
+            voltarHome()
+            alert ('Cadastro realizado com sucesso!!!')
+        }
+        
+}
+
+exibirContatos()
+// getContatos()
+
+document.getElementById('pesquisa')
+        .addEventListener('keydown', exibirPesquisa)
+
+document.getElementById('novo-contato')
+        .addEventListener('click', cadastrarContato)
+
+document.getElementById('cancelar')
+        .addEventListener('click', voltarHome)
+
+document.getElementById('salvar')
+        .addEventListener('click', salvarContato)
